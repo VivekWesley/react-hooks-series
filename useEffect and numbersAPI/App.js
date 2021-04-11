@@ -23,23 +23,25 @@ const App = () => {
   })
 
   const [count, setCount] = useState(0)
-  const [person, setPerson] = useState(null);
+
+  const [person, setPerson] = useState(null)
 
   const { data, loading } = useFetch(`http://numbersapi.com/${count}/trivia`);
 
   // 1. these useEffect() hooks renders everytime page is loaded in order,  
+
   useEffect(async () => {
     const response = await fetch('https://api.randomuser.me/');
     const data = await response.json();
+    console.log(data);
     const [item] = data.results;
     setPerson(item);
-  }, [])
+  }, [person]);
 
   useEffect(() => {
     console.log('hello world 2')
   }, [])
   // ______________________
-
 
   // 2. this useEffect() renders everytime password is state changes
   useEffect(() => {
@@ -49,6 +51,36 @@ const App = () => {
 
   return (
     <div>
+      <div>
+        <Card variant="elevation">
+          <h2>NumbersAPI DATA</h2>
+          <div>
+            <b>#{count} :</b> {loading ? "loading..." : data}
+          </div>
+
+          <ButtonGroup size="small">
+            <BUTTON startIcon={<SaveIcon />} variant="contained" color="primary" onClick={() => setCount(count => count + 1)}>increment</BUTTON>
+            <BUTTON startIcon={<CancelIcon />} variant="contained" color="secondary" onClick={() => setCount(count => count - 1)}>decrement</BUTTON>
+          </ButtonGroup>
+        </Card>
+        <br />
+        <Card variant="elevation">
+          <h2>random user api</h2>
+          {person &&
+            <div>
+              <img src={person.picture.medium} alt="profile photo" /> <br />
+              <b>Name: </b> {person.name.first} {person.name.last} <br />
+              <b>Email: </b> {person.email}<br />
+              <b>Gender: </b> {person.gender}<br />
+              <b>Age: </b> {person.dob.age}<br />
+              <b>Phone: </b> {person.cell}<br />
+              <b>City: </b> {person.location.city}<br />
+              <b>State: </b> {person.location.state}<br />
+              <b>Country: </b> {person.location.country}<br />
+            </div>}
+        </Card>
+      </div>
+
       <div>
         <Avatar>
           <ImageIcon />
@@ -66,23 +98,7 @@ const App = () => {
       <div>
         <TextField type="password" variant="outlined" size="small" name="password" label="Password" value={values.password} onChange={handleChange} />
       </div>
-      <div>
-        <Card variant="elevation">
-          NumbersAPI DATA <br />
-          <div>{count}</div>
-          <div>{loading ? "loading..." : data}</div>
-        </Card>
-        <ButtonGroup size="small">
-          <BUTTON startIcon={<SaveIcon />} variant="contained" color="primary" onClick={() => setCount(count => count + 1)}>increment</BUTTON>
-          <BUTTON startIcon={<CancelIcon />} variant="contained" color="secondary" onClick={() => setCount(count => count - 1)}>decrement</BUTTON>
-        </ButtonGroup>
-      </div>
-      {person && <div> Name: {person.name.first} &nbsp; &nbsp; {person.name.last}</div>}
-      {person && <div> Gender: {person.gender}</div>}
-      {person && <div> Email: {person.email}</div>}
-      {person && <div> City: {person.location.city}</div>}
-      {person && <div> State: {person.location.state}</div>}
-      {person && <div> Country: {person.location.coun}</div>}
+
     </div>
   )
 }
