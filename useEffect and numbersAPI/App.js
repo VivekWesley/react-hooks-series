@@ -30,10 +30,18 @@ const App = () => {
 
   // 1. these useEffect() hooks renders everytime page is loaded in order,  
 
+  // useEffect(async () => {
+  //   const response = await fetch('https://api.randomuser.me/');
+  //   const data = await response.json();
+  //   console.log(data);
+  //   const [item] = data.results;
+  //   setPerson(item);
+  // }, [person]);
+
+
   useEffect(async () => {
     const response = await fetch('https://api.randomuser.me/');
     const data = await response.json();
-    console.log(data);
     const [item] = data.results;
     setPerson(item);
   }, [person]);
